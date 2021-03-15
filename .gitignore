@@ -127,3 +127,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+data.json
+winners.json
+.vscode/launch.json
+.vscode/settings.json
+.vscode/tasks.json
+logs/log.html
+logs/output.xml
+logs/report.html
