@@ -1,4 +1,3 @@
 robotframework>=4.0.0
 robotframework-crypto
-colorama
 gspread
