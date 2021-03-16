@@ -20,4 +20,4 @@ class ContestUtils:
         console(f"Message:      {secondary}\n")
 
     def log_winner(self, name, email):
-        console(f"{name[:16]:16} | {email[:30]:30}")
+        console(f"{name[:30]:30} | {email[:48]:48}")

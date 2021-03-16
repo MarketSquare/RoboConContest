@@ -79,8 +79,9 @@ Save And Show Winners
 Display Winners
     [Arguments]             ${public_winners}
     Log To Console          \nRoboCon 2021 Contest Winners are:
+    Log To Console          ==============================================================================
     Log Winner              Name:    Mail:
-    Log To Console          =============================================
+    Log To Console          ==============================================================================
     FOR    ${winner}   IN   @{public_winners}
         ${prefix}    ${domain}              Split String    ${winner}[1]    @
         IF  len($prefix) < 3
