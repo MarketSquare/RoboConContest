@@ -9,6 +9,7 @@ Library           OperatingSystem
 *** Variables ***
 ${PRIMARY_ANSWER}=      crypt:dR7yT4WceddtEkCGCEPkO/cJGdv0O43JNS21xiVgYlpfQX2zj9qkkcVSSAn+SKz9mdJs3gyDjCM1Ai2U3qrCD0WBjvemRAdotabESw==
 ${SECONDARY_ANSWER}=    crypt:8ZSIMenSw+ZhCCxRsZ33t7O+cuiNB+chB4d5QA6xvTQSimanVpZgf1MSh+t8nBxfPYa3Pka3KATj3hwB+qSyt2dNlb9dpUl7vM+Xi1lVhUTjm8GPVBygGQ==
+${BLACKLIST_PATTERN}=   .*robotframework.org
 ${NUMBER_OF_WINNERS}=   ${10}
 @{WINNERS}=             @{EMPTY}
 
@@ -19,7 +20,6 @@ Find RoboCon 2021 Contest Winners
     ${unique_answers}=      Filter Out Duplicates           ${answers}
     @{potential_winners}    Filter For Correct Answers      ${unique_answers}
     Draw Winners From       @{potential_winners}
-    Log To Console          \n
     Save And Show Winners
     Reveal Secret Messages  ${PRIMARY_ANSWER}               ${SECONDARY_ANSWER}
 
@@ -43,6 +43,9 @@ Filter For Correct Answers
     ${primary_corrects}     Create List
     ${secondary_corrects}   Create List
     FOR    ${answer}   IN   @{unique_answers}
+        ${match}            Get Regexp Matches      ${answer}[Your e-mail address]  ${BLACKLIST_PATTERN}
+        Continue For Loop If    "${match}" != "@{EMPTY}"
+
         IF    $answer["Important Message"] == $PRIMARY_ANSWER
             Append To List  ${primary_corrects}     ${answer}
         ELSE IF    $answer["Important Message"] == $SECONDARY_ANSWER
@@ -75,7 +78,7 @@ Save And Show Winners
 
 Display Winners
     [Arguments]             ${public_winners}
-    Log To Console          RoboCon 2021 Contest Winners are:
+    Log To Console          \nRoboCon 2021 Contest Winners are:
     Log Winner              Name:    Mail:
     Log To Console          =============================================
     FOR    ${winner}   IN   @{public_winners}
