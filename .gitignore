@@ -135,3 +135,11 @@ winners.json
 logs/log.html
 logs/output.xml
 logs/report.html
+
+# Robot Framework files
+log.html
+report.html
+output.xml
+
+# PyCharm config files
+.idea/

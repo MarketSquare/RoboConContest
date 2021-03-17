@@ -16,8 +16,8 @@ class ContestUtils:
         return self.contest_data
 
     def reveal_secret_messages(self, primary, secondary):
-        console(f"\nReal Message: {primary}")
-        console(f"Message:      {secondary}\n")
+        console(f"\nEncoded Message:      {secondary}")
+        console(f"Important Message:    {primary}\n")
 
     def log_winner(self, name, email):
-        console(f"{name[:30]:30} | {email[:48]:48}")
+        console(f"{name[:30]:30} | {email[:45]:45}")
