@@ -52,19 +52,23 @@ Filter For Correct Answers
             Append To List  ${secondary_corrects}   ${answer}
         END
     END
-    [Return]    ${primary_corrects}    ${secondary_corrects}
+    [Return]                ${primary_corrects}     ${secondary_corrects}
 
 Draw Winner From
-    [Arguments]         ${potential_wins}
-    ${max_s}    =       ${{len($potential_wins)-1}}
-    Append To List      ${WINNERS}      ${{$potential_wins.pop(random.randint(0, $max_s))}}
+    [Arguments]             ${potential_wins}
+    ${max_s}    =           ${{len($potential_wins)-1}}
+    Append To List          ${WINNERS}      ${{$potential_wins.pop(random.randint(0, $max_s))}}
 
 Draw Winners From
-    [Arguments]         ${primaries}    ${secondaries}
-    FOR    ${i}    IN RANGE    ${NUMBER_OF_WINNERS}
-        IF    len($primaries) > 0
+    [Arguments]                 ${primaries}    ${secondaries}
+    ${primaries_amount}         Get Length      ${primaries}
+    ${secondaries_amount}       Get Length      ${secondaries}
+    ${correct_submissions}      =               ${{$primaries_amount + $secondaries_amount}}
+    Log To Console              \n\n\nDrawing winners from ${correct_submissions} correct answers...
+    FOR    ${i}     IN RANGE    ${NUMBER_OF_WINNERS}
+        IF          len($primaries) > 0
             Draw Winner From    ${primaries}
-        ELSE IF    len($secondaries) > 0
+        ELSE IF     len($secondaries) > 0
             Draw Winner From    ${secondaries}
         ELSE
             Exit For Loop
@@ -80,14 +84,19 @@ Display Winners
     [Arguments]             ${public_winners}
     Log To Console          \nRoboCon 2021 Contest Winners are:
     Log To Console          ==============================================================================
-    Log Winner              Name:    Mail:
+    Log Winner              Name:    E-mail address:
     Log To Console          ==============================================================================
     FOR    ${winner}   IN   @{public_winners}
-        ${prefix}    ${domain}              Split String    ${winner}[1]    @
-        IF  len($prefix) < 3
-            ${anonymized_prefix}    =       ${{'*' * len($prefix)}}
-        ELSE
-            ${anonymized_prefix}    =       ${prefix}[0]${{'*' * (len($prefix) - 2)}}${prefix}[-1]
-        END
-        Log Winner          ${winner}[0]    ${anonymized_prefix}@${domain}
+        ${anonymized_email}=                Anonymize Email Address         ${winner}[1]
+        Log Winner          ${winner}[0]    ${anonymized_email}
     END
+
+Anonymize Email Address
+    [Arguments]             ${email_address}
+    ${prefix}               ${domain}           Split String    ${email_address}    @
+    IF    len($prefix) < 3
+        ${anonymized_prefix}    =       ${{'*' * len($prefix)}}
+    ELSE
+        ${anonymized_prefix}    =       ${prefix}[0]${{'*' * (len($prefix) - 2)}}${prefix}[-1]
+    END
+    [Return]                ${anonymized_prefix}@${domain}
